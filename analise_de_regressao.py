@@ -1,5 +1,4 @@
 import main
-import seaborn as sns
 import statsmodels.api as sm
 import matplotlib.pyplot as plt
 
