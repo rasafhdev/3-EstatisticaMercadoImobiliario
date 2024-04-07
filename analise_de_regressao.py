@@ -1,23 +1,28 @@
 import main
 import seaborn as sns
 import statsmodels.api as sm
+import matplotlib.pyplot as plt
 
 class AnaliseRegressao(main.AnaliseDataset):
     def __init__(self):
         super().__init__()
-    
-    def treina_modelo(self, y, X):
-        y_data = self.df[y]
-        X_data = self.df[X]
-        X_data = sm.add_constant(X_data)
-        self.modelo = sm.OLS(y_data, X_data)
-        self.modelo.fit()
-        resultado = self.modelo.fit()
-        return resultado
+
+    def regressao_simples(self, x_col, y_col):
+        y = self.df[y_col]
+        X = self.df[x_col]
+        X = sm.add_constant(X)
+        modelo = sm.OLS(y, X)
+        resultado = modelo.fit()
+        print(resultado.summary())
+        plt.figure(figsize=(12, 8))
+        plt.xlabel(x_col, size=16)
+        plt.ylabel(y_col, size=16)
+        plt.plot(X[x_col], y, "o", label="Dados Reais")
+        plt.plot(X[x_col], resultado.fittedvalues, "r-", label="Linha de Regressão (Previsões do Modelo)")
+        plt.legend(loc="best")
+        plt.show()
 
 if __name__ == '__main__':
 
-    analisador = AnaliseRegressao()
-    resultado = analisador.treina_modelo('valor_aluguel', 'area_m2')
-    print(resultado.summary())
-
+    grafico = AnaliseRegressao()
+    grafico.regressao_simples('area_m2', 'valor_aluguel')
